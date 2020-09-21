@@ -1,4 +1,5 @@
 import { getRepository } from "typeorm";
+import { hash } from "bcryptjs";
 
 import User from "../models/User";
 
@@ -10,6 +11,8 @@ interface RequestDTO {
 
 class CreateUserService {
   public async execute({ name, email, password }: RequestDTO): Promise<User> {
+    const hashedPassord = await hash(password, 8);
+
     const usersRepository = getRepository(User);
 
     const checkUserExists = await usersRepository.findOne({
@@ -22,7 +25,7 @@ class CreateUserService {
     const user = usersRepository.create({
       name,
       email,
-      password,
+      password: hashedPassord,
     });
 
     await usersRepository.save(user);

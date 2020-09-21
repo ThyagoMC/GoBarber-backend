@@ -1,8 +1,20 @@
 import { Router } from "express";
+import { getRepository } from "typeorm";
+import User from "../models/User";
 
 const userRouter = Router();
 
 import CreateUserService from "../services/CreateUserService";
+
+userRouter.get("/", async (request, response) => {
+  try {
+    const userRepository = getRepository(User);
+
+    response.json(await userRepository.find());
+  } catch (error) {
+    return response.status(400).json({ error: error.message });
+  }
+});
 
 userRouter.post("/", async (request, response) => {
   try {
@@ -12,7 +24,7 @@ userRouter.post("/", async (request, response) => {
 
     const user = await createUser.execute({ name, email, password });
 
-    response.json(user);
+    response.json({ ...user, password: undefined });
   } catch (error) {
     return response.status(400).json({ error: error.message });
   }
