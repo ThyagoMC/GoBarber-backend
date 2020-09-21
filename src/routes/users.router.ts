@@ -13,13 +13,8 @@ import CreateUserService from "../services/CreateUserService";
 import UpdateUserAvatarService from "../services/UpdateUserAvatarService";
 
 userRouter.get("/", async (request, response) => {
-  try {
-    const userRepository = getRepository(User);
-
-    response.json(await userRepository.find());
-  } catch (error) {
-    return response.status(400).json({ error: error.message });
-  }
+  const userRepository = getRepository(User);
+  response.json(await userRepository.find());
 });
 
 userRouter.post("/", async (request, response) => {
@@ -37,17 +32,13 @@ userRouter.post("/", async (request, response) => {
 });
 
 userRouter.patch("/avatar", ensureSession, upload.single("avatar"), async (request, response) => {
-  try {
-    const updateAvatar = new UpdateUserAvatarService();
-    const user = await updateAvatar.execute({
-      user_id: request.user.id,
-      avatarFileName: request.file.filename,
-    });
+  const updateAvatar = new UpdateUserAvatarService();
+  const user = await updateAvatar.execute({
+    user_id: request.user.id,
+    avatarFileName: request.file.filename,
+  });
 
-    return response.json(user);
-  } catch (err) {
-    return response.status(400).json({ error: err.message });
-  }
+  return response.json(user);
 });
 
 export default userRouter;
