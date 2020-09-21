@@ -10,6 +10,7 @@ const userRouter = Router();
 const upload = multer(uploadConfig);
 
 import CreateUserService from "../services/CreateUserService";
+import UpdateUserAvatarService from "../services/UpdateUserAvatarService";
 
 userRouter.get("/", async (request, response) => {
   try {
@@ -36,7 +37,17 @@ userRouter.post("/", async (request, response) => {
 });
 
 userRouter.patch("/avatar", ensureSession, upload.single("avatar"), async (request, response) => {
-  return response.json({ ok: true });
+  try {
+    const updateAvatar = new UpdateUserAvatarService();
+    const user = await updateAvatar.execute({
+      user_id: request.user.id,
+      avatarFileName: request.file.filename,
+    });
+
+    return response.json(user);
+  } catch (err) {
+    return response.status(400).json({ error: err.message });
+  }
 });
 
 export default userRouter;
