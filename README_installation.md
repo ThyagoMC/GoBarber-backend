@@ -19,7 +19,7 @@ https://www.notion.so/Instalando-Docker-6290d9994b0b4555a153576a1d97bee2
     *postgres*
       nome da imagem  a ser instalada no container
 
-**Intalação do mongo** https://hub.docker.com/_/mongo
+**Intalação do mongodb** https://hub.docker.com/_/mongo
 `docker run --name mongodb -p 27017:27017 -d -t mongo`
   *mongo* 
     nome da imagem a ser instalada no container
@@ -28,6 +28,14 @@ https://www.notion.so/Instalando-Docker-6290d9994b0b4555a153576a1d97bee2
 `docker run --name redis -p 6379:6379 -d -t redis:alpine`
   *redis:alpine*  redis rodando em cima da distro linux alpine, é uma distro simplificada com foco em performance
 
+# Preparando o DB
+  Após a instalação do postgres acessar o mesmo usando um gerenciador (ex.: DBeaver), e criar o DB com o mesmo nome presente no arquivo `ormconfig.js` (ex.: gostack_gobarber)
 
 
+# TypeORM - o comando 'typeorm' depende da configuração disponíveis em package.json
 
+`yarn typeorm`
+  Lista os comandos disponíveis
+
+`yarn typeorm migration:run`  
+  Executa as migrations
